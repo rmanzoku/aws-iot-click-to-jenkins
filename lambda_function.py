@@ -12,15 +12,19 @@ logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     jenkins_url = os.environ.get("JENKINS_URL")
-    job_name = "test"
+    user = os.environ.get("USER")
+    password = os.environ.get("PASSWORD")
+
     logger.info("Received event: " + json.dumps(event))
 
+    job_name = event["placementInfo"]["attributes"].get("job")
     url = os.path.join(jenkins_url, "job", job_name, "buildWithParameters")
+    headers = {}
     logger.info("Request to " + url)
 
-    basic_user_and_pasword = base64.b64encode("jenkins:jenkins".encode("utf-8")).decode("utf-8")
-    headers = {}
-    headers["Authorization"] = "Basic " + basic_user_and_pasword
+    if password is not None:
+        basic_user_and_pasword = base64.b64encode((user+":"+password).encode("utf-8")).decode("utf-8")
+        headers["Authorization"] = "Basic " + basic_user_and_pasword
 
     params = {
         "ENV": "HOGEGG",

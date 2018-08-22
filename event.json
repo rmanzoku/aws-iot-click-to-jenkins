@@ -8,7 +8,7 @@
             "projectRegion": "us-west-2",
             "placementName": "Room-1",
             "deviceTemplateName": "lightButton"
-        }
+	}
     },
     "deviceEvent": {
         "buttonClicked": {
@@ -19,6 +19,9 @@
     "placementInfo": {
         "projectName": "ClickToJenkins",
         "placementName": "Office",
+	"attributes": {
+	    "job": "test"
+	},
         "devices": {
             "lightButton":"GXXXXXXXXXXXXXXX"
         }
