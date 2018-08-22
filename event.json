@@ -20,7 +20,9 @@
         "projectName": "ClickToJenkins",
         "placementName": "Office",
 	"attributes": {
-	    "job": "test"
+	    "job": "test",
+	    "single_env": "sand",
+	    "single_version": "master"
 	},
         "devices": {
             "lightButton":"GXXXXXXXXXXXXXXX"
