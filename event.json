@@ -1,0 +1,26 @@
+{
+    "deviceInfo": {
+        "deviceId": "GXXXXXXXXXXXXXXX",
+        "type": "button",
+        "remainingLife": 98.7,
+        "attributes": {
+            "projectName": "Sample-Project",
+            "projectRegion": "us-west-2",
+            "placementName": "Room-1",
+            "deviceTemplateName": "lightButton"
+        }
+    },
+    "deviceEvent": {
+        "buttonClicked": {
+            "clickType": "SINGLE",
+            "reportedTime": 1521159287205
+        }
+    },
+    "placementInfo": {
+        "projectName": "ClickToJenkins",
+        "placementName": "Office",
+        "devices": {
+            "lightButton":"GXXXXXXXXXXXXXXX"
+        }
+    }
+}
