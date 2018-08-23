@@ -12,7 +12,7 @@
     },
     "deviceEvent": {
         "buttonClicked": {
-            "clickType": "SINGLE",
+            "clickType": "LONG",
             "reportedTime": 1521159287205
         }
     },
@@ -20,9 +20,15 @@
         "projectName": "ClickToJenkins",
         "placementName": "Office",
 	"attributes": {
-	    "job": "test",
+	    "ssingle_job": "test",
 	    "single_env": "sand",
-	    "single_version": "master"
+	    "single_version": "master",
+	    "double_job": "test",
+	    "double_env": "prod",
+	    "double_version": "release",
+	    "long_job": "test2",
+	    "long_env": "sand",
+	    "long_version": "master"
 	},
         "devices": {
             "lightButton":"GXXXXXXXXXXXXXXX"

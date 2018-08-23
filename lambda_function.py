@@ -11,9 +11,23 @@ logger.setLevel(logging.INFO)
 
 
 def single_click_function(attributes):
-    return {
+    return attributes.get("single_job"), {
         "ENV": attributes.get("single_env"),
         "VERSION": attributes.get("single_version"),
+    }
+
+
+def double_click_function(attributes):
+    return attributes.get("double_job"), {
+        "ENV": attributes.get("double_env"),
+        "VERSION": attributes.get("double_version"),
+    }
+
+
+def long_click_function(attributes):
+    return attributes.get("long_job"), {
+        "ENV": attributes.get("long_env"),
+        "VERSION": attributes.get("long_version"),
     }
 
 
@@ -23,9 +37,8 @@ def lambda_handler(event, context):
     password = os.environ.get("PASSWORD")
 
     logger.info("Received event: " + json.dumps(event))
+    attributes = event["placementInfo"]["attributes"]
 
-    job_name = event["placementInfo"]["attributes"].get("job")
-    url = os.path.join(jenkins_url, "job", job_name, "buildWithParameters")
     headers = {}
 
     if password is not None:
@@ -33,16 +46,26 @@ def lambda_handler(event, context):
         headers["Authorization"] = "Basic " + basic_user_and_pasword
 
     clickType = event["deviceEvent"]["buttonClicked"]["clickType"]
-    if clickType == "SINGLE":
-        params = single_click_function(event["placementInfo"]["attributes"])
+    if (clickType == "SINGLE") and (attributes.get("single_job") is not None):
+        job_name, params = single_click_function(attributes)
+
+    elif (clickType == "DOUBLE") and (attributes.get("double_job") is not None):
+        job_name, params = double_click_function(attributes)
+
+    elif (clickType == "LONG") and (attributes.get("long_job") is not None):
+        job_name, params = long_click_function(attributes)
 
     else:
         logger.fatal("Not suppert deveceEvent: " + clickType)
-        exit(1)
+        return
+
+    url = os.path.join(jenkins_url, "job", job_name, "buildWithParameters")
 
     logger.info("Request to " + url)
     logger.info("Params is " + json.dumps(params))
     req = urllib.request.Request("{}?{}".format(url, urllib.parse.urlencode(params)),
                                  json.dumps(params).encode(),
                                  headers=headers)
-    urllib.request.urlopen(req)
+
+    with urllib.request.urlopen(req) as res:
+        logger.info("status: " + str(res.status))
