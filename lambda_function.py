@@ -36,7 +36,7 @@ def lambda_handler(event, context):
     user = os.environ.get("USER")
     password = os.environ.get("PASSWORD")
 
-    logger.info("Received event: " + json.dumps(event))
+    # logger.info("Received event: " + json.dumps(event))
     attributes = event["placementInfo"]["attributes"]
 
     headers = {}
@@ -59,6 +59,23 @@ def lambda_handler(event, context):
         logger.fatal("Not suppert deveceEvent: " + clickType)
         return
 
+    crumb_url = os.path.join(jenkins_url, 'crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+    logger.info("Crumb request to " + crumb_url)
+    req = urllib.request.Request(crumb_url, headers=headers)
+
+    try:
+        with urllib.request.urlopen(req) as res:
+            body = res.read().decode("utf-8")
+            print(body)
+            jenkins_crumb = body.split(":")[1]
+            logger.info("Jenkins-Crumb: " + jenkins_crumb)
+            headers["Jenkins-Crumb"] = jenkins_crumb
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            logger.info("No crumb")
+        else:
+            raise e
+
     url = os.path.join(jenkins_url, "job", job_name, "buildWithParameters")
 
     logger.info("Request to " + url)
@@ -67,5 +84,11 @@ def lambda_handler(event, context):
                                  json.dumps(params).encode(),
                                  headers=headers)
 
-    with urllib.request.urlopen(req) as res:
-        logger.info("status: " + str(res.status))
+    try:
+        with urllib.request.urlopen(req) as res:
+            logger.info("status: " + str(res.status))
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            logger.error("job not found: " + job_name)
+        else:
+            raise e

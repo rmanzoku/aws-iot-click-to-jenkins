@@ -12,7 +12,7 @@
     },
     "deviceEvent": {
         "buttonClicked": {
-            "clickType": "LONG",
+            "clickType": "DOUBLE",
             "reportedTime": 1521159287205
         }
     },
