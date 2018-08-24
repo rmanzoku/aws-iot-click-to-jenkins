@@ -7,6 +7,12 @@ AWS Lambda script.
 - Build with parameter
 - CSRF crumb request
 
+## Environment
+Set parameters to Lambda environment value.
+- `JENKINS_URL` jenkins server URL i.e. `http://jenkins.examlple.com:8080`
+- `USER` jenkins user.
+- `PASSWORD` jenkins user password
+
 ## How to use
 - Control click type by AWS IoT 1-click `Placements attributes` prefix.
   - `SINGLE_` for single click
