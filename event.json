@@ -12,7 +12,7 @@
     },
     "deviceEvent": {
         "buttonClicked": {
-            "clickType": "DOUBLE",
+            "clickType": "SINGLE",
             "reportedTime": 1521159287205
         }
     },
@@ -20,15 +20,16 @@
         "projectName": "ClickToJenkins",
         "placementName": "Office",
 	"attributes": {
-	    "ssingle_job": "test",
-	    "single_env": "sand",
-	    "single_version": "master",
-	    "double_job": "test",
-	    "double_env": "prod",
-	    "double_version": "release",
-	    "long_job": "test2",
-	    "long_env": "sand",
-	    "long_version": "master"
+	    "SINGLE_JOB": "test",
+	    "SINGLE_ENV": "sand",
+	    "SINGLE_VERSION": "master",
+	    "SINGLE_SNAKE_PARAM": "snake_case_param",
+	    "DOUBLE_JOB": "test",
+	    "DOUBLE_ENV": "prod",
+	    "DOUBLE_VERSION": "release",
+	    "LONG_JOB": "test2",
+	    "LONG_ENV": "sand",
+	    "LONG_VERSION": "master"
 	},
         "devices": {
             "lightButton":"GXXXXXXXXXXXXXXX"

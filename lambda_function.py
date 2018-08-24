@@ -10,25 +10,15 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def single_click_function(attributes):
-    return attributes.get("single_job"), {
-        "ENV": attributes.get("single_env"),
-        "VERSION": attributes.get("single_version"),
-    }
+def fetch_params_startswith(startswith, attributes):
+    ret = {}
+    keys = [k for k in attributes.keys() if k.startswith(startswith)]
 
+    for k in keys:
+        rk = k.replace(startswith, "")
+        ret[rk] = attributes[k]
 
-def double_click_function(attributes):
-    return attributes.get("double_job"), {
-        "ENV": attributes.get("double_env"),
-        "VERSION": attributes.get("double_version"),
-    }
-
-
-def long_click_function(attributes):
-    return attributes.get("long_job"), {
-        "ENV": attributes.get("long_env"),
-        "VERSION": attributes.get("long_version"),
-    }
+    return ret
 
 
 def lambda_handler(event, context):
@@ -46,14 +36,10 @@ def lambda_handler(event, context):
         headers["Authorization"] = "Basic " + basic_user_and_pasword
 
     clickType = event["deviceEvent"]["buttonClicked"]["clickType"]
-    if (clickType == "SINGLE") and (attributes.get("single_job") is not None):
-        job_name, params = single_click_function(attributes)
+    job_name = attributes.get(clickType + "_JOB")
 
-    elif (clickType == "DOUBLE") and (attributes.get("double_job") is not None):
-        job_name, params = double_click_function(attributes)
-
-    elif (clickType == "LONG") and (attributes.get("long_job") is not None):
-        job_name, params = long_click_function(attributes)
+    if job_name is not None:
+        params = fetch_params_startswith(clickType+"_", attributes)
 
     else:
         logger.fatal("Not suppert deveceEvent: " + clickType)
